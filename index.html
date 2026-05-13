@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>启航未来下载中心</title>
+    <title>启航未来无人机资料库</title>
     <style>
         * {
             margin: 0;
@@ -14,61 +14,120 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
+            padding-top: 70px;
+        }
+        /* 顶部固定大标题 */
+        .top-title {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background: rgba(255,255,255,0.95);
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 998;
+        }
+        /* 右上角搜索栏 */
+        .search-box {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 999;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            gap: 8px;
+        }
+        .search-box input {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            width: 260px;
+        }
+        .search-box .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        /* 左下角售后电话 */
+        .tel-footer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
         }
         .container {
-            background: #ffffff;
+            max-width: 900px;
+            margin: 20px auto 60px;
+            background: #fff;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            max-width: 750px;
-            width: 100%;
             padding: 40px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .header h1 {
-            font-size: 32px;
+        /* 一级标题 默认折叠可点击 */
+        h1 {
+            font-size: 28px;
             color: #1a202c;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .header p {
-            color: #718096;
-            margin-top: 10px;
-            font-size: 15px;
-        }
-        .item {
+            margin-bottom: 15px;
+            cursor: pointer;
+            padding: 15px 20px;
             background: #f8fafc;
             border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        h1:hover {
+            background: #667eea;
+            color: #fff;
+        }
+        /* 二级标题 默认折叠可点击 */
+        h2 {
+            font-size: 22px;
+            color: #2d3748;
+            margin: 20px 0 10px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            cursor: pointer;
+        }
+        h3 {
+            font-size: 18px;
+            color: #4a5568;
+        }
+        .item-wrap {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 12px 0 12px 15px;
+            border: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
         }
-        .item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            border-color: #667eea;
-        }
-        .item-name {
-            font-size: 17px;
-            font-weight: 600;
-            color: #2d3748;
-            line-height: 1.5;
-        }
-        .down-btn {
+        .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #ffffff;
             border: none;
-            padding: 12px 28px;
+            padding: 10px 24px;
             border-radius: 8px;
             font-size: 15px;
             font-weight: 600;
@@ -77,57 +136,270 @@
             transition: all 0.3s ease;
             white-space: nowrap;
         }
-        .down-btn:hover {
+        .btn.grey {
+            background: #999;
+        }
+        .btn:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        .tel-footer {
-            margin-top: 40px;
+        .tips {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 6px;
+        }
+        /* 折叠隐藏类 */
+        .hide {
+            display: none;
+        }
+        .empty-tip {
             text-align: center;
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+            font-size: 18px;
+            color: #718096;
+            padding: 40px;
         }
         @media (max-width: 600px) {
-            .item {
+            .top-title {
+                font-size: 18px;
+            }
+            .search-box {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+            .search-box input {
+                flex: 1;
+            }
+            .container {
+                margin-top: 20px;
+            }
+            .item-wrap {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .down-btn {
-                margin-top: 15px;
+            .btn {
+                margin-top: 12px;
                 width: 100%;
                 text-align: center;
+            }
+            .tel-footer {
+                bottom: 10px;
+                left: 10px;
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>启航未来下载中心</h1>
-            <p>无人机相关工具软件，点击下载即可获取</p>
-        </div>
+    <!-- 顶部固定大标题 -->
+    <div class="top-title">启航未来无人机资料库</div>
 
-        <div class="item">
-            <div class="item-name">3DR数传调参软件</div>
-            <a href="https://qhwluav.lanzoue.com/iPFo83pafe5i" target="_blank" class="down-btn">点击下载</a>
-        </div>
-
-        <div class="item">
-            <div class="item-name">华科尔地面站驱动</div>
-            <a href="https://qhwluav.lanzoue.com/iJoR63paoyna" target="_blank" class="down-btn">点击下载</a>
-        </div>
-
-        <div class="item">
-            <div class="item-name">华科尔飞控固件升级工具【华科尔助手】</div>
-            <a href="https://qhwluav.lanzoue.com/i6z6e3pafdkh" target="_blank" class="down-btn">点击下载</a>
-        </div>
-
-        <div class="tel-footer">
-            售后电话：18151889626
-        </div>
+    <!-- 右上角搜索框 + 搜索按钮 -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="输入关键字搜索...">
+        <button class="search-btn" id="searchBtn">搜索</button>
     </div>
+
+    <!-- 左下角固定售后电话 -->
+    <div class="tel-footer">售后电话：18151889626</div>
+
+    <div class="container">
+        <!-- 一级标题1 -->
+        <h1 class="menu-level1">各品牌飞控地面站软件及调试视频</h1>
+        <div class="level1-content hide">
+            <!-- 二级标题：华科尔飞控 -->
+            <h2 class="menu-level2">华科尔飞控</h2>
+            <div class="level2-content hide">
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔地面站官网下载页面</h3>
+                    </div>
+                    <a href="https://fly.walkera.cn/des/" target="_blank" class="btn">点击跳转</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔飞控固件更新网址</h3>
+                    </div>
+                    <a href="https://fly.walkera.cn/firmware/#20" target="_blank" class="btn">点击跳转</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔地面站驱动</h3>
+                    </div>
+                    <a href="https://qhwluav.lanzoue.com/iJoR63paoyna" target="_blank" class="btn">点击下载</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔飞控固件升级工具【华科尔助手】</h3>
+                    </div>
+                    <a href="https://qhwluav.lanzoue.com/i6z6e3pafdkh" target="_blank" class="btn">点击下载</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>3DR数传调参软件</h3>
+                    </div>
+                    <a href="https://qhwluav.lanzoue.com/iPFo83pafe5i" target="_blank" class="btn">点击下载</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔地面站绕8字飞行考试设置教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AD7GV1otnZ" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔WK-M01数传配对安装教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AVw59wtFZT" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔电池电压校准教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AXJvKEnRas" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔RTK连接教程及故障排查方法</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AM0ywVztok" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔飞控使用参数文件设置教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/ArVQ289X8N" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔飞控陀螺仪校准教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AUiOCqOmkh" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔飞控磁力计校准教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AGdkxMzMdl" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔固件升级教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AAclZCc3NH" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>华科尔飞控日志导出教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AdRd3iyuLP" target="_blank" class="btn">点击观看</a>
+                </div>
+            </div>
+
+            <!-- 二级标题：翎克飞控 -->
+            <h2 class="menu-level2">翎克飞控</h2>
+            <div class="level2-content hide">
+                <div class="item-wrap">
+                    <div>
+                        <h3>翎克X6Pro地面站</h3>
+                        <div class="tips">点击跳转后选择左下角下载图标，点击浏览器下载</div>
+                    </div>
+                    <a href="https://1859471275.share.123865.com/123pan/oYEtvd-skpX3" target="_blank" class="btn">点击下载</a>
+                </div>
+            </div>
+
+            <!-- 二级标题：凌动飞控 -->
+            <h2 class="menu-level2">凌动飞控</h2>
+            <div class="level2-content hide">
+                <div class="item-wrap">
+                    <div>
+                        <h3>凌动地面站官网下载页面</h3>
+                    </div>
+                    <a href="https://www.lingdongtech.net/flight_controller/ground_station.html" target="_blank" class="btn">点击跳转</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一级标题2 -->
+        <h1 class="menu-level1">视频教程</h1>
+        <div class="level1-content hide">
+            <!-- 二级标题：无人机组装 -->
+            <h2 class="menu-level2">无人机组装</h2>
+            <div class="level2-content hide">
+                <div class="item-wrap">
+                    <div>
+                        <h3>无人机机架安装教程</h3>
+                    </div>
+                    <a href="https://weixin.qq.com/sph/AWBC9PF5Dn" target="_blank" class="btn">点击观看</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>无人机桨叶更换教程</h3>
+                    </div>
+                    <a href="#" class="btn grey">敬请期待</a>
+                </div>
+                <div class="item-wrap">
+                    <div>
+                        <h3>无人机电机组装教程</h3>
+                    </div>
+                    <a href="#" class="btn grey">敬请期待</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索无结果提示 -->
+        <div id="noResult" class="empty-tip hide">未搜索到相关内容</div>
+    </div>
+
+    <script>
+        // 一级标题折叠展开
+        document.querySelectorAll('.menu-level1').forEach(item => {
+            item.addEventListener('click', function(){
+                const content = this.nextElementSibling;
+                content.classList.toggle('hide');
+            })
+        });
+
+        // 二级标题折叠展开
+        document.querySelectorAll('.menu-level2').forEach(item => {
+            item.addEventListener('click', function(){
+                const content = this.nextElementSibling;
+                content.classList.toggle('hide');
+            })
+        });
+
+        // 搜索功能 点击按钮+回车都可搜索
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const itemWraps = document.querySelectorAll('.item-wrap');
+        const noResult = document.getElementById('noResult');
+
+        function doSearch(){
+            let key = searchInput.value.trim().toLowerCase();
+            let hasMatch = false;
+            itemWraps.forEach(item => {
+                let text = item.innerText.toLowerCase();
+                if(text.includes(key)){
+                    item.style.display = 'flex';
+                    // 搜索命中时自动展开所有层级
+                    let p2 = item.closest('.level2-content');
+                    let p1 = item.closest('.level1-content');
+                    if(p2) p2.classList.remove('hide');
+                    if(p1) p1.classList.remove('hide');
+                    hasMatch = true;
+                }else{
+                    item.style.display = 'none';
+                }
+            });
+            noResult.classList.toggle('hide', hasMatch);
+        }
+
+        searchBtn.addEventListener('click', doSearch);
+        searchInput.addEventListener('keydown', function(e){
+            if(e.key === 'Enter') doSearch();
+        });
+    </script>
 </body>
 </html>
