@@ -3,409 +3,618 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>启航未来无人机资料库</title>
+    <title>启航未来无人机工厂资料库</title>
     <style>
+        /* ==================== 全局样式重置 ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
         }
-        /* 整体背景 天蓝色为主渐变 */
+
+        /* ==================== CSS变量 - 蓝色系配色方案 ==================== */
+        :root {
+            --primary-color: #165DFF;          /* 主蓝色 */
+            --primary-dark: #0E42D2;           /* 深蓝 */
+            --primary-light: #4080FF;          /* 浅蓝 */
+            --secondary-color: #69B1FF;        /* 辅助蓝 */
+            --bg-color: #F5F7FA;               /* 背景色 */
+            --bg-dark: #E8F3FF;                /* 浅蓝色背景 */
+            --text-primary: #1D2129;           /* 主文字色 */
+            --text-secondary: #4E5969;         /* 次要文字色 */
+            --text-light: #86909C;             /* 浅色文字 */
+            --white: #FFFFFF;                  /* 白色 */
+            --border-color: #E5E6EB;           /* 边框色 */
+            --shadow: 0 4px 16px rgba(22, 93, 255, 0.15);
+            --shadow-hover: 0 8px 24px rgba(22, 93, 255, 0.25);
+        }
+
+        /* ==================== 无人机SVG背景图案 ==================== */
         body {
-            background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            /* 使用内嵌SVG作为背景图案 */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23165DFF' fill-opacity='0.05'%3E%3Cpath d='M30 0L30 12L36 6L30 0ZM30 60L30 48L36 54L30 60ZM0 30L12 30L6 36L0 30ZM60 30L48 30L54 36L60 30ZM10.5 10.5L19 19L14.5 23.5L10.5 10.5ZM49.5 49.5L41 41L45.5 36.5L49.5 49.5ZM10.5 49.5L19 41L14.5 36.5L10.5 49.5ZM49.5 10.5L41 19L45.5 23.5L49.5 10.5Z'/%3E%3Cpath d='M30 20C34.4183 20 38 23.5817 38 28C38 32.4183 34.4183 36 30 36C25.5817 36 22 32.4183 22 28C22 23.5817 25.5817 20 30 20Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             min-height: 100vh;
-            padding: 20px;
-            padding-top: 70px;
         }
-        /* 顶部固定大标题 */
-        .top-title {
+
+        /* ==================== 顶部导航容器 ==================== */
+        .header-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 60px;
-            line-height: 60px;
-            text-align: center;
-            background: #ffffff;
-            font-size: 24px;
-            font-weight: bold;
-            color: #1E90FF;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 998;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
         }
-        /* 右上角搜索栏 */
-        .search-box {
-            position: fixed;
-            top: 15px;
-            right: 20px;
-            z-index: 999;
-            display: flex;
-            gap: 8px;
-        }
-        .search-box input {
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            width: 260px;
-        }
-        .search-box .search-btn {
-            background: #1E90FF;
-            color: #fff;
-            border: none;
-            padding: 0 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        /* 左下角售后电话 */
-        .tel-footer {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 999;
-            background: #fff;
+
+        /* ==================== 第一行 - 大标题区域（压缩高度） ==================== */
+        .header-title {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
             padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            font-size: 16px;
-            font-weight: 600;
-            color: #1E90FF;
+            text-align: center;
         }
-        .container {
-            max-width: 900px;
-            margin: 20px auto 60px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-        }
-        /* 一级标题 样式独立 */
-        h1 {
+
+        .header-title h1 {
             font-size: 28px;
-            color: #0066CC;
-            margin-bottom: 15px;
-            cursor: pointer;
-            padding: 15px 20px;
-            background: #E6F4FF;
-            border-radius: 12px;
-            border: 1px solid #B0E0E6;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            background: linear-gradient(90deg, #ffffff, #e6f0ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShine 3s ease-in-out infinite;
         }
-        h1:hover {
-            background: #1E90FF;
-            color: #fff;
+
+        @keyframes titleShine {
+            0%, 100% {
+                filter: brightness(1);
+            }
+            50% {
+                filter: brightness(1.2);
+            }
         }
-        /* 二级标题 样式独立 */
-        h2 {
-            font-size: 22px;
-            color: #008B8B;
-            margin: 20px 0 10px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            background: #F0FFFF;
-            cursor: pointer;
-            border-left: 5px solid #00CED1;
+
+        /* ==================== 滚动文字轨道（压缩高度） ==================== */
+        .marquee-container {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary-color), var(--primary-light));
+            padding: 5px 0;
+            overflow: hidden;
+            position: relative;
         }
-        /* 三级标题 样式独立 */
-        h3 {
-            font-size: 18px;
-            color: #2F4F4F;
-            background: #F5FAFF;
-            padding: 8px 12px;
-            border-radius: 6px;
+
+        .marquee-track {
             display: inline-block;
-        }
-        .item-wrap {
-            background: #F8FBFF;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 12px 0 12px 15px;
-            border: 1px solid #D1E7F5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn {
-            background: #1E90FF;
-            color: #ffffff;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            animation: marquee 20s linear infinite;
             white-space: nowrap;
         }
-        .btn.grey {
-            background: #99ABB6;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(30, 144, 255, 0.35);
-        }
-        .tips {
+
+        .marquee-text {
             font-size: 14px;
-            color: #5F7A8C;
-            margin-top: 6px;
+            color: var(--white);
+            font-weight: 500;
+            padding: 0 100%;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
-        /* 折叠隐藏类 */
-        .hide {
-            display: none;
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
         }
-        .empty-tip {
+
+        /* ==================== 第二行 - 导航菜单栏（压缩高度） ==================== */
+        .nav-bar {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 主菜单列表 */
+        .main-menu {
+            display: flex;
+            list-style: none;
+            position: relative;
+        }
+
+        /* 主菜单项（压缩高度） */
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item > a {
+            display: block;
+            padding: 10px 28px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .menu-item > a:hover {
+            color: var(--primary-color);
+            background-color: var(--bg-dark);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* ==================== 纯CSS下拉菜单 ==================== */
+        .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 240px;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            border-radius: 0 0 8px 8px;
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        /* 关键：悬停时显示下拉菜单 */
+        .menu-item:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* 子菜单项样式 */
+        .submenu li {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .submenu li:last-child {
+            border-bottom: none;
+        }
+
+        .submenu li a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .submenu li a:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+            padding-left: 28px;
+        }
+
+        /* 敬请期待样式 */
+        .coming-soon {
+            padding: 16px;
             text-align: center;
-            font-size: 18px;
-            color: #5F7A8C;
-            padding: 40px;
+            color: var(--text-light);
+            font-size: 14px;
         }
-        @media (max-width: 600px) {
-            .top-title {
-                font-size: 18px;
+
+        /* ==================== 主体内容区域（调整上边距） ==================== */
+        .main-content {
+            margin-top: 115px; /* 压缩后减小上边距 */
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 功能卡片区域 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 28px 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--primary-color);
+            text-decoration: none;
+            display: block;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-card .icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: white;
+            font-size: 26px;
+        }
+
+        .feature-card h3 {
+            font-size: 19px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* 说明区域 */
+        .info-section {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .info-section h3 {
+            font-size: 22px;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--bg-dark);
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            padding: 10px 0;
+            padding-left: 28px;
+            position: relative;
+            color: var(--text-secondary);
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .info-section li:last-child {
+            border-bottom: none;
+        }
+
+        .info-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .info-section li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .info-section li a:hover {
+            color: var(--primary-color);
+        }
+
+        /* ==================== 页脚 ==================== */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            padding: 32px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-main {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+
+        .footer-phone {
+            font-size: 15px;
+            margin-bottom: 14px;
+            opacity: 0.85;
+        }
+
+        .footer .copyright {
+            font-size: 13px;
+            opacity: 0.6;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* ==================== 响应式设计 - 移动端适配 ==================== */
+        @media (max-width: 768px) {
+            .header-title h1 {
+                font-size: 20px;
+                letter-spacing: 1px;
             }
-            .search-box {
-                position: relative;
-                top: 0;
-                right: 0;
-                margin-bottom: 20px;
-                width: 100%;
+
+            .header-title {
+                padding: 8px 12px;
             }
-            .search-box input {
-                flex: 1;
+
+            .marquee-text {
+                font-size: 12px;
             }
-            .container {
-                margin-top: 20px;
+
+            .marquee-container {
+                padding: 4px 0;
             }
-            .item-wrap {
-                flex-direction: column;
-                align-items: flex-start;
+
+            .nav-container {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding: 0 10px;
             }
-            .btn {
-                margin-top: 12px;
-                width: 100%;
-                text-align: center;
+
+            .menu-item > a {
+                padding: 10px 14px;
+                font-size: 13px;
             }
-            .tel-footer {
-                bottom: 10px;
-                left: 10px;
-                font-size: 14px;
+
+            .submenu {
+                min-width: 200px;
+            }
+
+            .main-content {
+                margin-top: 100px;
+                padding: 20px 15px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-section {
+                padding: 20px;
+            }
+
+            .footer-main {
+                font-size: 15px;
+            }
+
+            .footer-phone {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title h1 {
+                font-size: 17px;
+                letter-spacing: 1px;
+            }
+
+            .menu-item > a {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .main-content {
+                margin-top: 90px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 顶部固定大标题 -->
-    <div class="top-title">启航未来无人机资料库</div>
+    <!-- ==================== 顶部固定导航区域 ==================== -->
+    <header class="header-container">
+        <!-- 第一行：大标题 -->
+        <div class="header-title">
+            <h1>启航未来无人机工厂资料库</h1>
+        </div>
 
-    <!-- 右上角搜索框 + 搜索按钮 -->
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="输入关键字搜索...">
-        <button class="search-btn" id="searchBtn">搜索</button>
-    </div>
-
-    <!-- 左下角固定售后电话 -->
-    <div class="tel-footer">售后电话：18151889626</div>
-
-    <div class="container">
-        <!-- 一级标题1 -->
-        <h1 class="menu-level1">各品牌飞控地面站软件及调试视频</h1>
-        <div class="level1-content hide">
-            <!-- 二级标题：华科尔飞控 -->
-            <h2 class="menu-level2">华科尔飞控</h2>
-            <div class="level2-content hide">
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔地面站官网下载页面</h3>
-                    </div>
-                    <a href="https://fly.walkera.cn/des/" target="_blank" class="btn">点击跳转</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔飞控固件更新网址</h3>
-                    </div>
-                    <a href="https://fly.walkera.cn/firmware/#20" target="_blank" class="btn">点击跳转</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔地面站驱动</h3>
-                    </div>
-                    <a href="https://qhwluav.lanzoue.com/iJoR63paoyna" target="_blank" class="btn">点击下载</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔飞控固件升级工具【华科尔助手】</h3>
-                    </div>
-                    <a href="https://qhwluav.lanzoue.com/i6z6e3pafdkh" target="_blank" class="btn">点击下载</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>3DR数传调参软件</h3>
-                    </div>
-                    <a href="https://qhwluav.lanzoue.com/iPFo83pafe5i" target="_blank" class="btn">点击下载</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔地面站绕8字飞行考试设置教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AD7GV1otnZ" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔WK-M01数传配对安装教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AVw59wtFZT" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔电池电压校准教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AXJvKEnRas" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔RTK连接教程及故障排查方法</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AM0ywVztok" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔飞控使用参数文件设置教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/ArVQ289X8N" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔飞控陀螺仪校准教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AUiOCqOmkh" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔飞控磁力计校准教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AGdkxMzMdl" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔固件升级教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AAclZCc3NH" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>华科尔飞控日志导出教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AdRd3iyuLP" target="_blank" class="btn">点击观看</a>
-                </div>
-            </div>
-
-            <!-- 二级标题：翎克飞控 -->
-            <h2 class="menu-level2">翎克飞控</h2>
-            <div class="level2-content hide">
-                <div class="item-wrap">
-                    <div>
-                        <h3>翎克X6Pro地面站</h3>
-                        <div class="tips">点击跳转后选择左下角下载图标，点击浏览器下载</div>
-                    </div>
-                    <a href="https://1859471275.share.123865.com/123pan/oYEtvd-skpX3" target="_blank" class="btn">点击下载</a>
-                </div>
-            </div>
-
-            <!-- 二级标题：凌动飞控 -->
-            <h2 class="menu-level2">凌动飞控</h2>
-            <div class="level2-content hide">
-                <div class="item-wrap">
-                    <div>
-                        <h3>凌动地面站官网下载页面</h3>
-                    </div>
-                    <a href="https://www.lingdongtech.net/flight_controller/ground_station.html" target="_blank" class="btn">点击跳转</a>
-                </div>
+        <!-- 滚动文字轨道 -->
+        <div class="marquee-container">
+            <div class="marquee-track">
+                <span class="marquee-text">欢迎访问启航未来无人机资料库，徐州启航未来航空航天科技有限公司竭诚为您服务！</span>
             </div>
         </div>
 
-        <!-- 一级标题2 -->
-        <h1 class="menu-level1">视频教程</h1>
-        <div class="level1-content hide">
-            <!-- 二级标题：无人机组装 -->
-            <h2 class="menu-level2">无人机组装</h2>
-            <div class="level2-content hide">
-                <div class="item-wrap">
-                    <div>
-                        <h3>无人机机架安装教程</h3>
-                    </div>
-                    <a href="https://weixin.qq.com/sph/AWBC9PF5Dn" target="_blank" class="btn">点击观看</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>无人机桨叶更换教程</h3>
-                    </div>
-                    <a href="#" class="btn grey">敬请期待</a>
-                </div>
-                <div class="item-wrap">
-                    <div>
-                        <h3>无人机电机组装教程</h3>
-                    </div>
-                    <a href="#" class="btn grey">敬请期待</a>
-                </div>
+        <!-- 第二行：导航菜单 -->
+        <nav class="nav-bar">
+            <div class="nav-container">
+                <ul class="main-menu">
+                    <!-- 菜单一：软件下载 -->
+                    <li class="menu-item">
+                        <a href="javascript:void(0)">软件下载</a>
+                        <ul class="submenu">
+                            <li><a href="在此处粘贴跳转链接">华科尔飞控相关软件</a></li>
+                            <li><a href="在此处粘贴跳转链接">翎客飞控软件</a></li>
+                            <li><a href="在此处粘贴跳转链接">凌动飞控相关软件</a></li>
+                            <li><a href="在此处粘贴跳转链接">其他飞控相关软件</a></li>
+                            <li><a href="在此处粘贴跳转链接">3DR数传软件</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 菜单二：视频教学 -->
+                    <li class="menu-item">
+                        <a href="javascript:void(0)">视频教学</a>
+                        <ul class="submenu">
+                            <li><a href="在此处粘贴跳转链接">整机安装调试及维修</a></li>
+                            <li><a href="在此处粘贴跳转链接">地面站飞控相关操作视频</a></li>
+                            <li><a href="在此处粘贴跳转链接">电池使用教程</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 菜单三：资料下载 -->
+                    <li class="menu-item">
+                        <a href="javascript:void(0)">资料下载</a>
+                        <ul class="submenu">
+                            <li><a href="在此处粘贴跳转链接">参数及使用说明</a></li>
+                            <li><a href="在此处粘贴跳转链接">常见问题排查</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 菜单四：其他链接 -->
+                    <li class="menu-item">
+                        <a href="javascript:void(0)">其他链接</a>
+                        <ul class="submenu">
+                            <li class="coming-soon">敬请期待</li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
+        </nav>
+    </header>
+
+    <!-- ==================== 主体内容区域 ==================== -->
+    <main class="main-content">
+        <!-- 功能卡片展示 - 已添加可点击链接 -->
+        <section class="features-grid">
+            <a href="在此处粘贴链接" class="feature-card">
+                <div class="icon">📥</div>
+                <h3>软件下载中心</h3>
+                <p>提供华科尔、翎客、凌动等主流飞控的官方软件及驱动程序，确保您获得最新最稳定的版本。</p>
+            </a>
+
+            <a href="在此处粘贴链接" class="feature-card">
+                <div class="icon">🎬</div>
+                <h3>视频教学专区</h3>
+                <p>从基础安装到高级调试，系统化的视频教程帮助您快速掌握无人机操作和维护技能。</p>
+            </a>
+
+            <a href="在此处粘贴链接" class="feature-card">
+                <div class="icon">📚</div>
+                <h3>技术资料库</h3>
+                <p>详细的参数说明文档和常见问题排查指南，是您解决技术问题的得力助手。</p>
+            </a>
+
+            <a href="在此处粘贴链接" class="feature-card">
+                <div class="icon">🛠️</div>
+                <h3>技术支持服务</h3>
+                <p>专业的技术团队为您提供全方位的售后支持，确保您的设备始终处于最佳状态。</p>
+            </a>
+        </section>
+
+        <!-- 常见问题排查 - 内容改为待上传，可点击跳转 -->
+        <section class="info-section">
+            <h3>🔧 常见问题排查</h3>
+            <ul>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+            </ul>
+        </section>
+
+        <!-- 快速导航 - 内容改为待上传，可点击跳转 -->
+        <section class="info-section">
+            <h3>🚀 快速导航</h3>
+            <ul>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+                <li><a href="在此处粘贴跳转链接">待上传</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-main">启航未来无人机工厂 | 专业的无人机源头工厂</p>
+            <p class="footer-phone">售后联系电话：18151889626</p>
+            <p class="copyright">© 2026 启航未来 QHWL. All Rights Reserved.</p>
         </div>
+    </footer>
 
-        <!-- 搜索无结果提示 -->
-        <div id="noResult" class="empty-tip hide">未搜索到相关内容</div>
-    </div>
-
+    <!-- ==================== JavaScript 交互增强 ==================== -->
     <script>
-        // 一级标题折叠展开
-        document.querySelectorAll('.menu-level1').forEach(item => {
-            item.addEventListener('click', function(){
-                const content = this.nextElementSibling;
-                content.classList.toggle('hide');
-            })
-        });
-
-        // 二级标题折叠展开
-        document.querySelectorAll('.menu-level2').forEach(item => {
-            item.addEventListener('click', function(){
-                const content = this.nextElementSibling;
-                content.classList.toggle('hide');
-            })
-        });
-
-        // 搜索功能 点击按钮+回车都可搜索
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const itemWraps = document.querySelectorAll('.item-wrap');
-        const noResult = document.getElementById('noResult');
-
-        function doSearch(){
-            let key = searchInput.value.trim().toLowerCase();
-            let hasMatch = false;
-            itemWraps.forEach(item => {
-                let text = item.innerText.toLowerCase();
-                if(text.includes(key)){
-                    item.style.display = 'flex';
-                    // 搜索命中时自动展开所有层级
-                    let p2 = item.closest('.level2-content');
-                    let p1 = item.closest('.level1-content');
-                    if(p2) p2.classList.remove('hide');
-                    if(p1) p1.classList.remove('hide');
-                    hasMatch = true;
-                }else{
-                    item.style.display = 'none';
+        // 平滑滚动处理
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
                 }
             });
-            noResult.classList.toggle('hide', hasMatch);
-        }
+        });
 
-        searchBtn.addEventListener('click', doSearch);
-        searchInput.addEventListener('keydown', function(e){
-            if(e.key === 'Enter') doSearch();
+        // 导航栏滚动效果（可选增强）
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header-container');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 8px 24px rgba(22, 93, 255, 0.2)';
+            } else {
+                header.style.boxShadow = '0 4px 16px rgba(22, 93, 255, 0.15)';
+            }
+        });
+
+        // 移动端触摸支持（为下拉菜单添加触摸支持）
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('touchstart', function(e) {
+                const submenu = this.querySelector('.submenu');
+                if (submenu) {
+                    // 切换显示状态
+                    const isVisible = submenu.style.opacity === '1';
+                    // 先关闭所有其他子菜单
+                    document.querySelectorAll('.submenu').forEach(sm => {
+                        sm.style.opacity = '0';
+                        sm.style.visibility = 'hidden';
+                        sm.style.transform = 'translateY(-10px)';
+                    });
+                    // 切换当前子菜单
+                    if (!isVisible) {
+                        submenu.style.opacity = '1';
+                        submenu.style.visibility = 'visible';
+                        submenu.style.transform = 'translateY(0)';
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+
+        // 点击页面其他区域关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.menu-item')) {
+                document.querySelectorAll('.submenu').forEach(submenu => {
+                    submenu.style.opacity = '';
+                    submenu.style.visibility = '';
+                    submenu.style.transform = '';
+                });
+            }
         });
     </script>
 </body>
